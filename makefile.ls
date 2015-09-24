@@ -9,7 +9,7 @@ ast-src = "assets"
 s = -> "#ast-src#it"
 d = -> "#ast-dst#it"
 
-{baseUrl} = require('./site.json')
+baseUrl = ""
 
 
 parse ->
