@@ -1,3 +1,4 @@
+application = angular.module('application', [])
 
 { directive }        = require('./easyDirective.ls')
 { render, div, raw } = require('teacup')
@@ -6,14 +7,18 @@ moment               = require('moment')
 debug                = require('debug')('calendar')
 _s                   = require('underscore.string')
 
+require('../css/obsidian.css')
+require('../css/fonts.css')
+require('../less/main.less')
+
 directive "calendar", ->
     debug("Creating calendar..")
 
     @import '$http'
-    @byval \startMonth, \numberOfMonths, \format, \url 
+    @byval \startMonth, \numberOfMonths, \format, \url
 
     tooltip = render ->
-        div '.calendar__tooltip', { "ng-show": 'day.tooltipVisible' }, -> 
+        div '.calendar__tooltip', { "ng-show": 'day.tooltipVisible' }, ->
             div '.calendar__tooltip__title', '{{day.title}}'
 
     # console.log JSON.stringify(tooltip)
@@ -28,10 +33,10 @@ directive "calendar", ->
                             "ng-click"      : "gotoDay(day)",
                             "ng-mouseenter" : 'showTooltip(day)',
                             "ng-mouseleave" : 'hideTooltip(day)',
-                            style         : "{{day.style}}" 
-                            }, -> 
+                            style         : "{{day.style}}"
+                            }, ->
                                 raw("{{day.number}} #tooltip")
-                    
+
 
     @create (elem, attr) ->
 
@@ -43,7 +48,7 @@ directive "calendar", ->
 
         @showTooltip = (day) ~>
             if day.link?
-                day.tooltipVisible = true 
+                day.tooltipVisible = true
 
 
         @hideTooltip = (day) ~>
@@ -53,13 +58,13 @@ directive "calendar", ->
             @['$http']({method: 'GET', url: @url }).success (d) ~>
                 @data = _.indexBy d, ~>
                     @getUniformDate(moment(it.date))
-                debug "Data loaded - updating calendar"    
+                debug "Data loaded - updating calendar"
                 @updateCalendar();
 
         @gotoDay = (d) ~>
             window.location.href = d.link if d.link?
 
-        @getUniformDate = (d) ~>  
+        @getUniformDate = (d) ~>
             return d.format('DD-MM-YYYY');
 
         @filter = (arg) ~>
@@ -71,10 +76,10 @@ directive "calendar", ->
             if @data? and @data[cd]?
                 if (not @filter?) or @filter(@data[cd])
                     return {
-                        title: @data[cd].title, 
-                        category: "calendar__category_"+@data[cd].category, 
-                        tags: @data[cd].tags, 
-                        link: @data[cd].link                        
+                        title: @data[cd].title,
+                        category: "calendar__category_"+@data[cd].category,
+                        tags: @data[cd].tags,
+                        link: @data[cd].link
                         }
             return undefined
 
@@ -86,12 +91,12 @@ directive "calendar", ->
                 maxdays = cm.daysInMonth();
                 cd = moment(cm);
                 days = []
-                if not @isSunday(cd) 
+                if not @isSunday(cd)
                     for k in [ 0 to (cd.day() - 1) ]
                         days.push {
-                            type: 'calendar__day_not_in_month', 
-                            number: 'NA', 
-                            date: moment(cd) 
+                            type: 'calendar__day_not_in_month',
+                            number: 'NA',
+                            date: moment(cd)
                         }
 
                 month-name = cd.format('MMMM')
@@ -109,7 +114,7 @@ directive "calendar", ->
                         dd.style = 'cursor: pointer'
                         dd.type  = [ info.category ] ++ info.tags.map -> "calendar__tag_#{_s.underscored(it)}"
 
-                    today = @getUniformDate(moment())        
+                    today = @getUniformDate(moment())
                     this_day = @getUniformDate(cd)
                     dd.type = ['calendar__day_is_today'] ++ dd.type if (today == this_day)
                     dd.type = ['calendar__day_not_working'] ++ dd.type if (cd.day() == 0 || cd.day() == 6)
@@ -124,4 +129,3 @@ directive "calendar", ->
         group =  ['startMonth', 'numberOfMonths', 'data', 'filter']
         @$watchCollection(group, @updateCalendar)
         setTimeout(@loadData, 0);
-
