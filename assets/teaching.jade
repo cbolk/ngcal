@@ -1,0 +1,49 @@
+extends ./layouts/base
+
+block append title
+  title Vittorio Zaccaria — Teaching
+
+block content
+  div(block='teaching-page')
+    div(elem='title') Informatica B
+    div(elem='year') Anno accademico 2015 — 2016
+    div(block='contacts')
+      div(elem='detail')
+        div(elem='key') Docente
+        div(elem='value') Vittorio Zaccaria
+      div(elem='detail')
+        div(elem='key') Ricevimento
+        div(elem='value') Martedì dopo la lezione (su appuntamento)
+      div(elem='detail')
+        div(elem='key') Ufficio
+        div(elem='value') Piazza Leonardo da Vinci 32 - 20133 Milano
+      div(elem='detail')
+        div(elem='key') Orario lezioni
+        div(elem='value')
+          a(href='https://www.google.com/calendar/embed?src=5tadrjuo9mo4l3fs9hpb6ut4as%40group.calendar.google.com&ctz=Europe/Rome') Orario delle lezioni e aule
+      div(elem='detail')
+        div(elem='key') Sezione
+        div(elem='value') Cognomi: F - Ma (soggetto a cambiamenti)
+      div(elem='detail')
+        div(elem='key') Programma dettagliato
+        div(elem='value')
+          a(href='deposit/programmaInfoB.pdf') Formato pdf
+
+
+    div(block='lecture-messages')
+      div(elem='title') Avvisi importanti
+      div(elem='messages')
+        div(elem='message')
+          div(elem='date') 23 Settembre 2015
+          div(elem='text')
+            :markdown
+              La prima lezione del corso sara' martedi' 6 Ottobre alle 13:15.
+
+
+    div(block='lecture-material')
+      div(elem='title') Calendario e materiale
+      div(elem='description')
+        :markdown
+          Cliccare sui giorni evidenziati in arancione per accedere al materiale corrispondente.
+
+      #my-calendar(elem='calendar', calendar, start-month='September 2015', number-of-months='6', url="#{baseUrl}/data/index.json")
