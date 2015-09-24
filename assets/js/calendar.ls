@@ -7,7 +7,6 @@ moment               = require('moment')
 debug                = require('debug')('calendar')
 _s                   = require('underscore.string')
 
-require('../css/obsidian.css')
 require('../css/fonts.css')
 require('../less/main.less')
 

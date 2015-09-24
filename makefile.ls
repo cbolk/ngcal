@@ -30,6 +30,7 @@ parse ->
                        ]
 
                 @dest d("/js/client.js"), ->
+                   @minifyjs ->
                        @concatjs -> [
                                 @copy ("./bower_components/angular/angular.min.js")
                                 @brfy s("/js/calendar.ls"), s("/**/*.{ls,js,css,less}")

@@ -37,11 +37,14 @@ dist/index.html: .build/3-index.html
 .build/concat-tmp4.js: .build/5-angular.min.js .build/6-calendar.js
 	cat $^ > $@
 
+.build/7-concat-tmp4.min.js: .build/concat-tmp4.js
+	uglifyjs .build/concat-tmp4.js -c -m  > $@
+
 dist/js: 
 	mkdir -p dist/js
 
-dist/js/client.js: .build/concat-tmp4.js dist/js
-	cp .build/concat-tmp4.js $@
+dist/js/client.js: .build/7-concat-tmp4.min.js dist/js
+	cp .build/7-concat-tmp4.min.js $@
 
 .PHONY : build-assets
 build-assets: dist/data/biblio.json dist/data/index.json dist/data/projects.json dist/index.html dist/js/client.js
@@ -49,32 +52,32 @@ build-assets: dist/data/biblio.json dist/data/index.json dist/data/projects.json
 .PHONY : build
 build: build-assets
 
-.PHONY : cmd-7
-cmd-7: 
+.PHONY : cmd-8
+cmd-8: 
 	make build
 
-.PHONY : cmd-seq-8
-cmd-seq-8: 
-	make cmd-7
+.PHONY : cmd-seq-9
+cmd-seq-9: 
+	make cmd-8
 
 .PHONY : all
-all: cmd-seq-8
-
-.PHONY : clean-9
-clean-9: 
-	rm -rf .build/0-biblio.json .build/1-index.json .build/2-projects.json dist/data/biblio.json dist/data/index.json dist/data/projects.json .build/3-index.html dist/index.html .build/5-angular.min.js .build/6-calendar.js .build/concat-tmp4.js dist/js dist/js/client.js
+all: cmd-seq-9
 
 .PHONY : clean-10
 clean-10: 
-	rm -rf .build
+	rm -rf .build/0-biblio.json .build/1-index.json .build/2-projects.json dist/data/biblio.json dist/data/index.json dist/data/projects.json .build/3-index.html dist/index.html .build/5-angular.min.js .build/6-calendar.js .build/concat-tmp4.js .build/7-concat-tmp4.min.js dist/js dist/js/client.js
 
 .PHONY : clean-11
 clean-11: 
+	rm -rf .build
+
+.PHONY : clean-12
+clean-12: 
 	mkdir -p .build
 
-.PHONY : cmd-12
-cmd-12: 
+.PHONY : cmd-13
+cmd-13: 
 	rm -rf dist/*
 
 .PHONY : clean
-clean: clean-9 clean-10 clean-11 cmd-12
+clean: clean-10 clean-11 clean-12 cmd-13
